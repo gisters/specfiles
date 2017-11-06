@@ -2,7 +2,7 @@
 %global shortcommit1 %(c=%{commit1}; echo ${c:0:7})
 
 Name:			simple-obfs
-Version:		0.0.3
+Version:		0.0.4
 Release:		1%{?dist}
 Summary:		A simple obfuscating tool
 
@@ -12,8 +12,8 @@ URL:			https://github.com/shadowsocks/%{name}
 Source0:		%{url}/archive/v%{version}.tar.gz
 Source1:		https://github.com/shadowsocks/libcork/archive/%{commit1}.tar.gz#/libcork-%{shortcommit1}.tar.gz
 AutoReq:		no
-BuildRequires:	asciidoc, autoconf, automake, gcc, libev-devel, libsodium-devel >= 1.0.4, libtool, make, pcre-devel, udns-devel, xmlto, zlib-devel
-Requires:		libev, libsodium-devel >= 1.0.4, pcre, udns, zlib
+BuildRequires:	asciidoc, autoconf, automake, c-ares-devel, gcc, libev-devel, libtool, make, openssl-devel, xmlto, zlib-devel
+Requires:		libev, c-ares, openssl, pcre, udns, zlib
 
 
 %description
