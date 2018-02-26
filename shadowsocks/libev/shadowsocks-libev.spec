@@ -6,7 +6,7 @@
 
 Name:           shadowsocks-libev
 Version:        3.1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A lightweight and secure socks5 proxy
 
 Group:          Applications/Internet
@@ -14,7 +14,7 @@ License:        GPLv3+
 URL:            https://github.com/shadowsocks/%{name}
 Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  asciidoc automake c-ares-devel gcc libev-devel libsodium-devel >= 1.0.4 libtool make mbedtls-devel openssl-devel pcre-devel xmlto
+BuildRequires:  asciidoc automake c-ares-devel gcc libev-devel libtool make mbedtls-devel openssl-devel pcre-devel xmlto
 
 %if 0%{?suse_version}
 BuildRequires:  libopenssl-devel
@@ -23,21 +23,33 @@ BuildRequires:  libopenssl-devel
 %if 0%{?use_systemd}
 %{?systemd_requires}
 %if 0%{?suse_version}
-BuildRequires:   systemd-rpm-macros
+BuildRequires:  systemd-rpm-macros
 %else
-BuildRequires:   systemd
+BuildRequires:  systemd
 %endif
+%endif
+
+%if 0%{?el7}
+BuildRequires:  libsodium13-devel
+%else
+BuildRequires:  libsodium-devel >= 1.0.4
 %endif
 
 AutoReq:         no
 Conflicts:       python-shadowsocks python3-shadowsocks
-Requires:        c-ares libev libsodium >= 1.0.4 mbedtls openssl pcre
+Requires:        c-ares libev mbedtls openssl pcre
 
 %if 0%{?fedora} || 0%{?rhel}
 Requires:        libcap
 %endif
 %if 0%{?suse_version}
 Requires:        libcap-progs
+%endif
+
+%if 0%{?el7}
+Requires:       libsodium13
+%else
+Requires:       libsodium >= 1.0.4
 %endif
 
 %description
