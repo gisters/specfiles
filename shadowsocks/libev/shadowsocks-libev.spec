@@ -1,3 +1,13 @@
+%global requires   pcre openssl mbedtls libsodium >= 1.0.4 libev c-ares
+%global conflicts  python-shadowsocks python3-shadowsocks
+%if 0%{?fedora} || 0%{?rhel}
+%global requires   %{?requires} libcap
+%endif
+%if 0%{?suse_version}
+%global requires   %{?requires} libcap-progs
+%endif
+%global project_desc shadowsocks-libev is a lightweight secured socks5 proxy for embedded devices and low end boxes.
+
 %if 0%{?fedora} >= 15 || 0%{?rhel} >=7 || 0%{?suse_version} >= 1210
 %global use_systemd 1
 %else
@@ -5,8 +15,8 @@
 %endif
 
 Name:           shadowsocks-libev
-Version:        3.2.0
-Release:        2%{?dist}
+Version:        3.2.1
+Release:        1%{?dist}
 Summary:        A lightweight and secure socks5 proxy
 
 Group:          Applications/Internet
@@ -14,52 +24,39 @@ License:        GPLv3+
 URL:            https://github.com/shadowsocks/%{name}
 Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  asciidoc automake c-ares-devel gcc libev-devel libtool make mbedtls-devel openssl-devel pcre-devel xmlto
+BuildRequires:  asciidoc automake c-ares-devel gcc libev-devel libsodium-devel >= 1.0.4 libtool make mbedtls-devel pcre-devel xmlto
 
 %if 0%{?suse_version}
 BuildRequires:  libopenssl-devel
+%else
+BuildRequires:  openssl-devel
 %endif
+
+AutoReq:        no
+Conflicts:      %{?conflicts}
+Requires:       %{?requires}
 
 %if 0%{?use_systemd}
 %{?systemd_requires}
 %if 0%{?suse_version}
-BuildRequires:  systemd-rpm-macros
+BuildRequires:   systemd-rpm-macros
 %else
-BuildRequires:  systemd
+BuildRequires:   systemd
 %endif
-%endif
-
-%if 0%{?el7}
-BuildRequires:  libsodium13-devel
-%else
-BuildRequires:  libsodium-devel >= 1.0.4
-%endif
-
-AutoReq:         no
-Conflicts:       python-shadowsocks python3-shadowsocks
-Requires:        c-ares libev mbedtls openssl pcre
-
-%if 0%{?fedora} || 0%{?rhel}
-Requires:        libcap
-%endif
-%if 0%{?suse_version}
-Requires:        libcap-progs
-%endif
-
-%if 0%{?el7}
-Requires:       libsodium13
-%else
-Requires:       libsodium >= 1.0.4
 %endif
 
 %description
-shadowsocks-libev is a lightweight secured scoks5 proxy for embedded devices and low end boxes.
+%{?project_desc}
 
 %prep
 %setup -q
 
 %build
+%if 0%{?use_system_lib}
+%configure --enable-shared --enable-system-shared-lib
+%else
 %configure --enable-shared
+%endif
 make %{?_smp_mflags}
 
 
@@ -167,6 +164,7 @@ Requires:       pcre openssl mbedtls libsodium >= 1.0.4 libev c-ares
 
 %description -n libshadowsocks-libev
 Shared library powered by shadowsocks-libev.
+%{?project_desc}
 
 %files -n libshadowsocks-libev
 %{_libdir}/*.so.*
@@ -186,6 +184,7 @@ Obsoletes:  shadowsocks-libev-devel < %{version}-%{release}
 
 %description -n libshadowsocks-libev-devel
 Development files for libshadowsocks-libev.
+%{?project_desc}
 
 %files -n libshadowsocks-libev-devel
 %{_includedir}/*
@@ -199,6 +198,7 @@ Requires:       zsh shadowsocks-libev = %{version}-%{release}
 
 %description zsh-completion
 zsh completion files for shadowsocks-libev.
+%{?project_desc}
 
 %files zsh-completion
 %{_datadir}/zsh/site-functions/*
