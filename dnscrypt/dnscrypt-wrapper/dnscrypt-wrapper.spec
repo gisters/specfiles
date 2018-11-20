@@ -8,7 +8,7 @@ License:		ISC
 URL:			http://dnscrypt.org/
 Source0:		https://github.com/Cofyc/%{name}/archive/v%{version}.tar.gz
 
-BuildRequires:	autoconf libevent-devel libsodium-devel
+BuildRequires:	autoconf gcc libevent-devel libsodium-devel
 
 %description
 DNSCrypt is a protocol that authenticates communications between a DNS
