@@ -1,10 +1,6 @@
 ## rpm-spec
 
-- dnscrypt-wrapper ![](https://copr.fedorainfracloud.org/coprs/registe/others/package/dnscrypt-wrapper/status_image/last_build.png)
-- shadowsocks-libev ![](https://copr.fedorainfracloud.org/coprs/registe/others/package/shadowsocks-libev/status_image/last_build.png)
-- simple-obfs ![](https://copr.fedorainfracloud.org/coprs/registe/others/package/simple-obfs/status_image/last_build.png)
-
-The spec has been tested only on Centos 7 and later.
+The spec has been tested only on Centos 6 and later.
 
 ### How to enable repo
 
