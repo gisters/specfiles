@@ -1,5 +1,5 @@
 Name:           libsodium
-Version:        1.0.5
+Version:        1.0.17
 Release:        1%{?dist}
 Summary:        The Sodium crypto library
 License:        ISC
