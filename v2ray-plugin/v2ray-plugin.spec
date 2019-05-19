@@ -1,3 +1,8 @@
+%global commit 1e5b3780468cadb1b3efa456434b525c208c888d
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global v2ray_ver 4.16.0
+%define debug_package %{nil}
+
 Name:           v2ray-plugin
 Version:        1.1.0
 Release:        1%{?dist}
@@ -6,33 +11,32 @@ Summary:        A SIP003 plugin based on v2ray
 Group:          Network
 License:        MIT
 URL:            https://github.com/shadowsocks/v2ray-plugin
-Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source1:        https://github.com/v2ray/v2ray-core/releases/download/v%{v2ray_ver}/src_all.zip
 
-BuildRequires:  git >= 1.8.3.1
-BuildRequires:  go-compilers-golang-compiler
+BuildRequires:  git golang
 
 %description
 Yet another SIP003 plugin for shadowsocks, based on v2ray
 
 %prep
 rm -rf %{name}-%{version}
-%setup -q -D -T -c -n %{name}-%{version} -a 0
-export GOPATH=$(pwd)/_build
-cd %{name}-%{version}
-go mod download
+%setup -c -T -D -a 0 -a 1
+mkdir -p ./_build
+ln -s $(pwd) ./_build/src
+
 
 %build
-cd %{name}-%{version}
+export GOPATH=$(pwd)/_build
+cd %{name}-%{commit}
 export LDFLAGS="-X main.VERSION=%{version}"
-%gobuild -o _bin/v2ray-plugin
+CGO_ENABLED=0 go build -v -ldflags "$LDFLAGS" -gcflags "" -o _bin/v2ray-plugin
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-install -m 755 %{name}-%{version}/_bin/v2ray-plugin %{buildroot}%{_bindir}
+install -m 755 %{name}-%{commit}/_bin/v2ray-plugin %{buildroot}%{_bindir}
 
 %files
-%license %{name}-%{version}/LICENSE
-%doc %{name}-%{version}/README.md
 %{_bindir}/v2ray-plugin
 
 %changelog
