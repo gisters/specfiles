@@ -15,7 +15,7 @@
 %endif
 
 Name:           shadowsocks-libev
-Version:        3.3.1
+Version:        3.3.3
 Release:        1%{?dist}
 Summary:        A lightweight and secure socks5 proxy
 
